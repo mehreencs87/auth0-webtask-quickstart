@@ -1,12 +1,12 @@
 # Welcome to Auth0 Sandbox
 
-These instructions show you the basic usage of Auth0 Sanbdox. For an overview of the technology pleas review the [JSConf.AR 2014 slides](http://tjanczuk.github.io/about/sandbox.html#/). 
+These instructions show you the basic usage of Auth0 Sandbox. For an overview of the technology please have a look at the [JSConf.AR 2014 slides](http://tjanczuk.github.io/about/sandbox.html#/). 
 
 ## What's in the box
 
 You will receive three pieces of information when Auth0 Sandbox is provisioned for you:
 
-1. **The sandbox URL**. This is an HTTPS endpoint you use for all communication with the sandbox. This quickstart uses https://sndbx.it.auth0.com as an example. 
+1. **The sandbox URL**. This is an HTTPS endpoint you use for all communication with the sandbox. This quickstart uses https://sndbx.it.auth0.com as an example (not a real endpoint). 
 2. **The key**. This is a secret key you must provide as the `key` URL query parameter to authenticate your calls to the sandbox URL. Examples below assume the key is stored in the `KEY` environment variable. 
 3. **Server X.509 certificate**. This is the X.509 certificate the HTTPS endpoint will present. Since this is a self-signed certificate, you need to explicitly configure trust to it on your system. Examples below instead ignore server identity (not secure and not recommended for anything other than ad-hoc testing).
 
@@ -31,13 +31,13 @@ POST /{tenant}?key={sandbox_key}
 
 For example: https://sndbx.it.auth0.com/tenant17?key=abc123
 
-The {tenant} URL path segment is an arbitrary string that defines the isolation boundary for code execution. Calls made with the same {tenant} value MAY share the same execution environment, possibly including residual effects of prior or concurrent calls. Calls made with different {tenant} values WILL NEVER share the same execution environment, and are isolated from each other in terms of network, memory, and CPU utilization. 
+The {tenant} URL path segment is an arbitrary string that defines the isolation boundary for code execution. Calls made with the same {tenant} value MAY share the same execution environment, possibly including residual effects of prior or concurrent calls *from the same tenant*. Calls made with different {tenant} values WILL NEVER share the same execution environment, and are isolated from each other in terms of network, memory, and CPU utilization. 
 
-The choice of {tenant} values and their mapping to the concept of a tenant is application specific and defined at the layer above the Auth0 Sandbox. 
+The choice of {tenant} values and their mapping to higher level tenancy concepts is application specific and defined at the layer above the Auth0 Sandbox. 
 
 ### Simple closure
 
-Submit an HTTP POST request to sandbox URL with JavaScript (Node.js) code which *returns* a JavaScript function that accepts **one** parameter: a *callback*. Within the function you must invoke the callback when you are done. The callback accepts two parameters: an error (if any), and a single return value which can be serizalied to JSON. For example:
+Submit an HTTP POST request to sandbox URL with JavaScript (Node.js) code which returns a JavaScript function that accepts **one** parameter: a *callback*. Within the function you must invoke the callback when you are done. The callback accepts two parameters: an error (if any), and a single return value which can be serizalied to JSON. For example:
 
 ```javascript
 return function (cb) {
@@ -47,7 +47,7 @@ return function (cb) {
 
 ### Parameterized closure
 
-Similar to the simple closure mechanism above, except the JavaScript function now accepts **two** parameters: a *context* and a *callback*. The context will contain URL query parameters specified in the call to the sandbox URL represented as a JavaScript object. For example:
+Similar to the simple closure mechanism above, except the JavaScript function now accepts **two** parameters: a *context* and a *callback*. The context will contain URL query parameters specified in the call to the sandbox URL, represented as a JavaScript object. For example:
 
 ```javascript
 return function (context, cb) {
@@ -90,7 +90,7 @@ lodash: ~2.4.1
 pubnub: ^3.7.0
 ```
 
-One module that is worth singling out on the list is [Edge.js](http://tjanczuk.github.io/edge/#/). Edge.js enables running C# code in addition to Node.js in the Auth0 Sandbox. Please refer to the documentaiton at http://tjanczuk.github.io/edge for more details. Here is a Hello, world in C#: 
+One module that is worth singling out on the list is [Edge.js](http://tjanczuk.github.io/edge/#/). Edge.js enables running C# code in addition to Node.js in the Auth0 Sandbox. Please refer to the documentaiton at http://tjanczuk.github.io/edge for more details. Here is a *Hello, world* in C# via Edge.js: 
 
 ```javascript
 return function (context, cb) {
@@ -156,4 +156,5 @@ Will return up to 100 messages for tenant `tenant4` that contain the string `Hel
 ## Feedback and support
 
 File issues at https://github.com/auth0/auth0-sandbox-quickstart/issues
+
 Contact us at support@auth0.com
