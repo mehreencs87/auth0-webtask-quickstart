@@ -1,20 +1,20 @@
-# Welcome to Auth0 Sandbox
+# Welcome to Auth0 Web Task
 
-These instructions show you the basic usage of Auth0 Sandbox. For an overview of the technology please have a look at the [JSConf.AR 2014 slides](http://tjanczuk.github.io/about/sandbox.html#/). 
+These instructions show you the basic usage of Auth0 Web Task. For an overview of the technology please have a look at the [JSConf.AR 2014 slides](http://tjanczuk.github.io/about/sandbox.html#/). 
 
 ## What's in the box
 
-You will receive two pieces of information when Auth0 Sandbox is provisioned for you:
+You will receive two pieces of information when Auth0 Web Task is provisioned for you:
 
-1. **The sandbox URL**. This is an HTTPS endpoint you use for all communication with the sandbox. This quickstart uses https://sndbx.it.auth0.com as an example (not a real endpoint). 
-2. **The key**. This is a secret key you must provide as the `key` URL query parameter to authenticate your calls to the sandbox URL. Examples below assume the key is stored in the `KEY` environment variable. 
+1. **The Web Task URL**. This is an HTTPS endpoint you use for all communication with the system. This quickstart uses https://webtsk.it.auth0.com as an example (not a real endpoint). 
+2. **The key**. This is a secret key you must provide as the `key` URL query parameter to authenticate your calls to the Web Task URL. Examples below assume the key is stored in the `KEY` environment variable. 
 
 ## Hello, world
 
-Run code in the sandbox that returns a string on behalf of *tenant1*: 
+Run a web task that returns a string on behalf of *tenant1*: 
 
 ```
-curl https://sndbx.it.auth0.com/tenant1?key=$KEY --data-binary '
+curl https://webtsk.it.auth0.com/tenant1?key=$KEY --data-binary '
 return function (cb) { 
   cb(null, "Hello, world!"); 
 }
@@ -23,23 +23,23 @@ return function (cb) {
 
 ## Programming model
 
-### Sandbox endpoint
+### Web Task endpoint
 
-The Auth0 Sandbox exposes a single HTTPS POST endpoint that is used to submit code for execution:
+The Auth0 Web Task exposes a single HTTPS POST endpoint that is used to submit code for execution:
 
 ```
-POST /{tenant}?key={sandbox_key}
+POST /{tenant}?key={webtask_key}
 ```
 
-For example: https://sndbx.it.auth0.com/tenant17?key=abc123
+For example: https://webtsk.it.auth0.com/tenant17?key=abc123
 
 The {tenant} URL path segment is an arbitrary string that defines the isolation boundary for code execution. Calls made with the same {tenant} value MAY share the same execution environment, possibly including residual effects of prior or concurrent calls *from the same tenant*. Calls made with different {tenant} values WILL NEVER share the same execution environment, and are isolated from each other in terms of network, memory, and CPU utilization. 
 
-The choice of {tenant} values and their mapping to higher level tenancy concepts is application specific and defined at the layer above the Auth0 Sandbox. 
+The choice of {tenant} values and their mapping to higher level tenancy concepts is application specific and defined at the layer above the Auth0 Web Task. 
 
 ### Simple closure
 
-Submit an HTTP POST request to sandbox URL with JavaScript (Node.js) code which returns a JavaScript function that accepts **one** parameter: a *callback*. Within the function you must invoke the callback when you are done. The callback accepts two parameters: an error (if any), and a single return value which can be serizalied to JSON. For example:
+Submit an HTTP POST request to the Web Task URL with JavaScript (Node.js) code which returns a JavaScript function that accepts **one** parameter: a *callback*. Within the function you must invoke the callback when you are done. The callback accepts two parameters: an error (if any), and a single return value which can be serizalied to JSON. For example:
 
 ```javascript
 return function (cb) {
@@ -49,7 +49,7 @@ return function (cb) {
 
 ### Parameterized closure
 
-Similar to the simple closure mechanism above, except the JavaScript function now accepts **two** parameters: a *context* and a *callback*. The context will contain URL query parameters specified in the call to the sandbox URL, represented as a JavaScript object. For example:
+Similar to the simple closure mechanism above, except the JavaScript function now accepts **two** parameters: a *context* and a *callback*. The context will contain URL query parameters specified in the call to the Web Task URL, represented as a JavaScript object. For example:
 
 ```javascript
 return function (context, cb) {
@@ -57,13 +57,13 @@ return function (context, cb) {
 }
 ```
 
-When the code above is submitted to https://sndbx.it.auth0.com/tenant1?key=abc123&name=world, the response will be *Hello, world*. 
+When the code above is submitted to https://webtsk.it.auth0.com/tenant1?key=abc123&name=world, the response will be *Hello, world*. 
 
 **NOTE** the context will not contain the *key* URL query parameter. 
 
 ### What about modules
 
-The Auth0 Sandbox provides a uniform execution environment for all calls. The environment contains several pre-installed Node.js modules which can be accessed with `require`. This is the list: 
+The Auth0 Web Task provides a uniform execution environment for all calls. The environment contains several pre-installed Node.js modules which can be accessed with `require`. This is the list: 
 
 ```
 async: ~0.9.0
@@ -92,7 +92,7 @@ lodash: ~2.4.1
 pubnub: ^3.7.0
 ```
 
-One module that is worth singling out on the list is [Edge.js](http://tjanczuk.github.io/edge/#/). Edge.js enables running C# code in addition to Node.js in the Auth0 Sandbox. Please refer to the documentaiton at http://tjanczuk.github.io/edge for more details. Here is a *Hello, world* in C# via Edge.js: 
+One module that is worth singling out on the list is [Edge.js](http://tjanczuk.github.io/edge/#/). Edge.js enables running C# code in addition to Node.js in the Auth0 Web Task. Please refer to the documentation at http://tjanczuk.github.io/edge for more details. Here is a *Hello, world* in C# via Edge.js: 
 
 ```javascript
 return function (context, cb) {
@@ -106,21 +106,21 @@ return function (context, cb) {
 
 ## Logging
 
-Auth0 Sandbox allows streaming access to real-time logging information over HTTPS. Logs are available as a stream of JSON [bunyan](https://github.com/trentm/node-bunyan) records in a long running HTTPS response. There are two kinds of logs: system-wide logs, and tenant-specific logs. 
+Auth0 Web Task allows streaming access to real-time logging information over HTTPS. Logs are available as a stream of JSON [bunyan](https://github.com/trentm/node-bunyan) records in a long running HTTPS response. There are two kinds of logs: system-wide logs, and tenant-specific logs. 
 
 ### System wide logs
 
 You can access streaming, system-wide logs with an HTTPS GET call to sandbox URL. Take note of the path and the secret key:
 
 ```
-curl -N -s https://sndbx.it.auth0.com/logs/system?key=$KEY
+curl -N -s https://webtsk.it.auth0.com/logs/system?key=$KEY
 ```
 
 If you want to make the output easy on the eye, you can filter through the `bunyan` client: 
 
 ```
 npm install bunyan -g
-curl -N -s https://sndbx.it.auth0.com/logs/system?key=$KEY | bunyan
+curl -N -s https://webtsk.it.auth0.com/logs/system?key=$KEY | bunyan
 ```
 
 ### Tenant logs
@@ -128,7 +128,7 @@ curl -N -s https://sndbx.it.auth0.com/logs/system?key=$KEY | bunyan
 Tenant logs contain only the output generated to stdout and stderr by the custom code running on behalf of that tenant. Logs generated across several calls made on behalf of a single tenant are consolidated into a single stream.
 
 ```
-curl -N -s https://sndbx.it.auth0.com/logs/tenant/tenant23?key=$KEY | bunyan
+curl -N -s https://webtsk.it.auth0.com/logs/tenant/tenant23?key=$KEY | bunyan
 ```
 
 The last URL path segment denotes the tenant identifier of the tenant to get logs for. 
@@ -150,7 +150,7 @@ The following URL query parameters can be used to customize the behavior of logg
 For example: 
 
 ```
-curl -N -s https://sndbx.it.auth0.com/logs/tenant/tenant4?key=$KEY\&f.msg=Hello\&max=100\&timeout=1000
+curl -N -s https://webtsk.it.auth0.com/logs/tenant/tenant4?key=$KEY\&f.msg=Hello\&max=100\&timeout=1000
 ```
 
 Will return up to 100 messages for tenant `tenant4` that contain the string `Hello`. If no messages are generated within any 1s interval, the server will close the response. 
