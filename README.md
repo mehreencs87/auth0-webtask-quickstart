@@ -4,19 +4,21 @@ These instructions show you the basic usage of Auth0 Sandbox. For an overview of
 
 ## What's in the box
 
-You will receive three pieces of information when Auth0 Sandbox is provisioned for you:
+You will receive two pieces of information when Auth0 Sandbox is provisioned for you:
 
 1. **The sandbox URL**. This is an HTTPS endpoint you use for all communication with the sandbox. This quickstart uses https://sndbx.it.auth0.com as an example (not a real endpoint). 
 2. **The key**. This is a secret key you must provide as the `key` URL query parameter to authenticate your calls to the sandbox URL. Examples below assume the key is stored in the `KEY` environment variable. 
-3. **Server X.509 certificate**. This is the X.509 certificate the HTTPS endpoint will present. Since this is a self-signed certificate, you need to explicitly configure trust to it on your system. Examples below instead ignore server identity (not secure and not recommended for anything other than ad-hoc testing).
 
 ## Hello, world
 
 Run code in the sandbox that returns a string on behalf of *tenant1*: 
 
 ```
-curl -k https://sndbx.it.auth0.com/tenant1?key=$KEY --data-binary \
-  'return function (cb) { cb(null, "Hello, world!"); }'
+curl https://sndbx.it.auth0.com/tenant1?key=$KEY --data-binary '
+return function (cb) { 
+  cb(null, "Hello, world!"); 
+}
+'
 ```
 
 ## Programming model
@@ -111,14 +113,14 @@ Auth0 Sandbox allows streaming access to real-time logging information over HTTP
 You can access streaming, system-wide logs with an HTTPS GET call to sandbox URL. Take note of the path and the secret key:
 
 ```
-curl -k -N -s https://sndbx.it.auth0.com/logs/system?key=$KEY
+curl -N -s https://sndbx.it.auth0.com/logs/system?key=$KEY
 ```
 
 If you want to make the output easy on the eye, you can filter through the `bunyan` client: 
 
 ```
 npm install bunyan -g
-curl -k -N -s https://sndbx.it.auth0.com/logs/system?key=$KEY | bunyan
+curl -N -s https://sndbx.it.auth0.com/logs/system?key=$KEY | bunyan
 ```
 
 ### Tenant logs
@@ -126,7 +128,7 @@ curl -k -N -s https://sndbx.it.auth0.com/logs/system?key=$KEY | bunyan
 Tenant logs contain only the output generated to stdout and stderr by the custom code running on behalf of that tenant. Logs generated across several calls made on behalf of a single tenant are consolidated into a single stream.
 
 ```
-curl -k -N -s https://sndbx.it.auth0.com/logs/tenant/tenant23?key=$KEY | bunyan
+curl -N -s https://sndbx.it.auth0.com/logs/tenant/tenant23?key=$KEY | bunyan
 ```
 
 The last URL path segment denotes the tenant identifier of the tenant to get logs for. 
@@ -148,7 +150,7 @@ The following URL query parameters can be used to customize the behavior of logg
 For example: 
 
 ```
-curl -k https://sndbx.it.auth0.com/logs/tenant/tenant4?key=$KEY\&f.msg=Hello\&max=100\&timeout=1000
+curl -N -s https://sndbx.it.auth0.com/logs/tenant/tenant4?key=$KEY\&f.msg=Hello\&max=100\&timeout=1000
 ```
 
 Will return up to 100 messages for tenant `tenant4` that contain the string `Hello`. If no messages are generated within any 1s interval, the server will close the response. 
