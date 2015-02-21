@@ -90,6 +90,8 @@ pg: ^4.1.1
 node-cassandra-cql: ^0.4.4
 lodash: ~2.4.1
 pubnub: ^3.7.0
+oauth: ~0.9.12
+aws-sdk: ~2.1.13
 ```
 
 One module that is worth singling out on the list is [Edge.js](http://tjanczuk.github.io/edge/#/). Edge.js enables running C# code in addition to Node.js in the Auth0 Web Task. Please refer to the documentation at http://tjanczuk.github.io/edge for more details. Here is a *Hello, world* in C# via Edge.js: 
